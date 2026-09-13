@@ -1,6 +1,8 @@
 // LifeRPG API Client - Connects Next.js Frontend to Spring Boot REST Backend
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" ? "" : "http://localhost:8080");
 const TOKEN_KEY = "liferpg_jwt_token";
 const USER_KEY = "liferpg_current_user";
 
@@ -190,7 +192,8 @@ async function request<T>(
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const url = API_BASE ? `${API_BASE}${path}` : path;
+  const response = await fetch(url, {
     ...options,
     headers,
   });
@@ -227,7 +230,8 @@ export const api = {
   health: {
     async check(): Promise<boolean> {
       try {
-        const res = await fetch(`${API_BASE}/api/leaderboard/global`, {
+        const url = API_BASE ? `${API_BASE}/api/leaderboard/global` : "/api/leaderboard/global";
+        const res = await fetch(url, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
