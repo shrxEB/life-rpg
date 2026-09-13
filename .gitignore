@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# java / maven
+target/
+*.class
+.idea/
+*.iml
+
+# archives and backup extracts
+*.zip
+*.tar.gz
+liferpg-backend 2/
+questify/
