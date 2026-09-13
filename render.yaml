@@ -1,0 +1,39 @@
+services:
+  # ===================================================
+  # 1. Spring Boot Java Backend (Docker Web Service)
+  # ===================================================
+  - type: web
+    name: liferpg-backend
+    runtime: docker
+    dockerfilePath: liferpg-backend/Dockerfile
+    dockerContext: liferpg-backend
+    plan: free
+    region: ohio
+    envVars:
+      - key: DB_URL
+        value: jdbc:postgresql://ep-dawn-field-a5n6plwf-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+      - key: DB_USERNAME
+        value: neondb_owner
+      - key: DB_PASSWORD
+        value: npg_CyFaZ59JiGeu
+      - key: PORT
+        value: 8080
+
+  # ===================================================
+  # 2. Next.js Frontend (Node.js Web Service)
+  # ===================================================
+  - type: web
+    name: liferpg-frontend
+    runtime: node
+    plan: free
+    region: ohio
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: liferpg-backend
+          property: host
